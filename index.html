@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Demo</title>
+    <style>
+        /* Smooth transitions for theme switching */
+        body {
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Button animations */
+        .action-btn {
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Pulse animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button class="action-btn" id="animateBtn">Trigger Animation</button>
+        <select id="themeSelector">
+            <option value="light">Light Theme</option>
+            <option value="dark">Dark Theme</option>
+        </select>
+    </div>
+
+    <script>
+        // Theme management with localStorage
+        function saveThemePreference(theme) {
+            localStorage.setItem('selectedTheme', theme);
+        }
+
+        function applyTheme(theme) {
+            document.body.style.backgroundColor = theme === 'dark' ? '#2d2d2d' : '#ffffff';
+            document.body.style.color = theme === 'dark' ? '#ffffff' : '#000000';
+        }
+
+        // Initialize theme from storage
+        const savedTheme = localStorage.getItem('selectedTheme') || 'light';
+        document.getElementById('themeSelector').value = savedTheme;
+        applyTheme(savedTheme);
+
+        // Theme selector handler
+        document.getElementById('themeSelector').addEventListener('change', (e) => {
+            const theme = e.target.value;
+            saveThemePreference(theme);
+            applyTheme(theme);
+        });
+
+        // Animation trigger with cleanup
+        document.getElementById('animateBtn').addEventListener('click', function() {
+            this.style.animation = 'pulse 0.5s ease';
+            this.addEventListener('animationend', () => {
+                this.style.animation = '';
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>
